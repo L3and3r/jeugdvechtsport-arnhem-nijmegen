@@ -101,6 +101,9 @@
   .chips{display:flex;flex-wrap:wrap;gap:.4rem;margin-top:.7rem}
   .chip{font-family:var(--font-mono);font-size:var(--step--2);text-transform:uppercase;letter-spacing:.05em;padding:.35rem .6rem;border:1px solid var(--line);border-radius:2px;background:var(--surface);color:var(--muted);cursor:pointer}
   .chip[aria-pressed="true"]{background:var(--ink);color:var(--ground);border-color:var(--ink)}
+  .dayfilter{display:flex;flex-wrap:wrap;align-items:center;gap:.5rem;margin-top:.7rem}
+  .dayfilter__label{font-family:var(--font-mono);font-size:var(--step--2);text-transform:uppercase;letter-spacing:.05em;color:var(--muted)}
+  .seg button[data-day]{text-transform:capitalize}
   .resultline{display:flex;flex-wrap:wrap;gap:.4rem 1.1rem;align-items:center;margin-top:.8rem;font-family:var(--font-mono);font-size:var(--step--1);color:var(--muted)}
   .clearbtn{background:none;border:0;color:var(--vermilion);font:inherit;cursor:pointer;text-decoration:underline}
   .disc-note{font-family:var(--font-mono);font-size:var(--step--2);color:var(--muted);margin-top:.6rem}
@@ -170,7 +173,7 @@
   <div class="wrap">
     <div class="controls">
       <input class="search" id="search" type="search" placeholder="Zoek op naam, plaats of discipline&hellip;" aria-label="Zoeken">
-      <div class="seg" role="group" aria-label="Filter op plaats">
+      <div class="seg" id="citySeg" role="group" aria-label="Filter op plaats">
         <button type="button" data-city="all" aria-pressed="true">Alles</button>
         <button type="button" data-city="Arnhem" aria-pressed="false">Arnhem</button>
         <button type="button" data-city="Nijmegen" aria-pressed="false">Nijmegen</button>
@@ -178,11 +181,24 @@
       </div>
     </div>
     <div class="chips" id="chips" role="group" aria-label="Filter op discipline"></div>
+    <div class="dayfilter" role="group" aria-label="Filter op trainingsdag voor 14-jarigen">
+      <span class="dayfilter__label">Traint 14 jr op</span>
+      <div class="seg" id="daySeg">
+        <button type="button" data-day="all" aria-pressed="true">Alle</button>
+        <button type="button" data-day="ma" aria-pressed="false">ma</button>
+        <button type="button" data-day="di" aria-pressed="false">di</button>
+        <button type="button" data-day="wo" aria-pressed="false">wo</button>
+        <button type="button" data-day="do" aria-pressed="false">do</button>
+        <button type="button" data-day="vr" aria-pressed="false">vr</button>
+        <button type="button" data-day="za" aria-pressed="false">za</button>
+        <button type="button" data-day="zo" aria-pressed="false">zo</button>
+      </div>
+    </div>
     <div class="resultline">
       <span id="resultcount">&nbsp;</span>
       <button class="clearbtn" id="clearbtn" type="button" hidden>Filters wissen</button>
     </div>
-    <p class="disc-note">Clubs staan gegroepeerd op hoofddiscipline; de tags tonen &aacute;lle disciplines die een club aanbiedt. Sommige aanbieders staan onder meerdere steden.</p>
+    <p class="disc-note">Clubs staan gegroepeerd op hoofddiscipline; de tags tonen &aacute;lle disciplines die een club aanbiedt. Sommige aanbieders staan onder meerdere steden. De regel <b>&ldquo;Traint 14 jr&rdquo;</b> toont de les(sen) waar een 14-jarige in valt volgens de clubwebsite &mdash; roosters wijzigen vaak, dus controleer ze bij de club.</p>
   </div>
 </div>
 
@@ -265,97 +281,97 @@
 
   var CLUBS=[
     // ============ ARNHEM ============
-    {name:"Budo Sport Arnhem",city:["Arnhem"],disc:["judo"],age:"vanaf 3 jr",loc:"15 locaties in de stad (o.a. Presikhaaf, Schuytgraaf)",desc:"Van speelse tumbellessen tot drie wedstrijdselecties (t/m 12, t/m 15 en 15+ jaar).",url:"https://www.budosportarnhem.nl/judo.php"},
+    {name:"Budo Sport Arnhem",city:["Arnhem"],disc:["judo"],age:"vanaf 3 jr",loc:"15 locaties in de stad (o.a. Presikhaaf, Schuytgraaf)",desc:"Van speelse tumbellessen tot drie wedstrijdselecties (t/m 12, t/m 15 en 15+ jaar).",t:"ma 19:00–20:30 (14+-selectietraining, Presikhaaf); recreatief per wijklocatie",url:"https://www.budosportarnhem.nl/judo.php"},
     {name:"Budovereniging BUSHi Arnhem",city:["Arnhem"],disc:["judo"],age:"vanaf ca. 4 jr",loc:"Dojo Brabantweg / Sporthal De Laar West",desc:"Recreatief én wedstrijdjudo, tumbling voor de jongsten en een naschools zelfverdedigingsprogramma.",url:"https://www.bushiarnhem.nl/"},
-    {name:"Sportschool Milder",city:["Arnhem","Regio"],disc:["judo","jiujitsu"],age:"vanaf 4 jr",loc:"Arnhem-Noord & -Zuid, Velp, Duiven-Westervoort",desc:"Judo en jiu-jitsu/zelfverdediging voor jeugd op vier locaties; tumbeljudo voor de jongsten, gratis proefles.",url:"https://www.sportschoolmilder.nl/"},
-    {name:"Budo-Ryu Arnhem",city:["Arnhem"],disc:["judo","jiujitsu","karate","kungfu","aikido"],age:"jeugd 6–17 jr",loc:"Angerenstein (Beekdallyceum)",desc:"Samenwerkende leraren: jeugdjudo, jujutsu, karate, kung fu en aikido; gratis trainen met Gelrepas (6–17 jr).",url:"https://budoryu.weebly.com/"},
+    {name:"Sportschool Milder",city:["Arnhem","Regio"],disc:["judo","jiujitsu"],age:"vanaf 4 jr",loc:"Arnhem-Noord & -Zuid, Velp, Duiven-Westervoort",desc:"Judo en jiu-jitsu/zelfverdediging voor jeugd op vier locaties; tumbeljudo voor de jongsten, gratis proefles.",t:"wo 18:00 (jiu-jitsu 12+); judotijden per locatie",url:"https://www.sportschoolmilder.nl/"},
+    {name:"Budo-Ryu Arnhem",city:["Arnhem"],disc:["judo","jiujitsu","karate","kungfu","aikido"],age:"jeugd 6–17 jr",loc:"Angerenstein (Beekdallyceum)",desc:"Samenwerkende leraren: jeugdjudo, jujutsu, karate, kung fu en aikido; gratis trainen met Gelrepas (6–17 jr).",t:"karate ma/wo 19:30–20:30 · jiu-jitsu ma/wo 20:30–21:30 (judo t/m 11 jr)",url:"https://budoryu.weebly.com/"},
     {name:"Ashihara Karate Arnhem",city:["Arnhem"],disc:["karate"],age:"jeugd",loc:"Klimmendaal, Arnhem-Noord",desc:"Jeugdkarate in de praktische, full-contact Ashihara-stijl (kaikan).",url:"https://www.facebook.com/AshiharaKarateArnhem/"},
-    {name:"Gouken Dojo",city:["Arnhem"],disc:["karate"],age:"kinderen",loc:"Arnhem",desc:"Full-contact Kyokushin-karate; kinderen leren spelenderwijs kihon, kata en kumite. Gelrepas mogelijk.",url:"https://www.goukendojo.nl/"},
-    {name:"Shotokan Karate Arnhem",city:["Arnhem"],disc:["karate"],age:"vanaf ca. 16 jr",loc:"Arnhem",desc:"Traditioneel Shotokan-karate; instroom vanaf ongeveer 16 jaar (oudere jeugd / jongvolwassenen).",url:"https://www.shotokankaratearnhem.nl/"},
-    {name:"Taekwon-Do Academie Gelderland",city:["Arnhem"],disc:["taekwondo"],age:"vanaf 7 jr",loc:"Dojang de Salamander, Schuytgraaf",desc:"ITF-taekwondo op woensdagavond; kinderen 8–12 gratis met Gelrepas, twee gratis proeflessen.",url:"https://www.sportinarnhem.nl/sport-bewegen/locaties-aanbieders/taekwon-do-academie-gelderland/"},
+    {name:"Gouken Dojo",city:["Arnhem"],disc:["karate"],age:"kinderen",loc:"Arnhem",desc:"Full-contact Kyokushin-karate; kinderen leren spelenderwijs kihon, kata en kumite. Gelrepas mogelijk.",t:"wo 20:00–21:30 · za 11:00–12:00 (vanaf 12 jr)",url:"https://www.goukendojo.nl/"},
+    {name:"Shotokan Karate Arnhem",city:["Arnhem"],disc:["karate"],age:"vanaf ca. 16 jr",loc:"Arnhem",desc:"Traditioneel Shotokan-karate; instroom vanaf ongeveer 16 jaar (oudere jeugd / jongvolwassenen).",t:"n.v.t. voor 14 jr — instroom pas vanaf ±16 jaar",url:"https://www.shotokankaratearnhem.nl/"},
+    {name:"Taekwon-Do Academie Gelderland",city:["Arnhem"],disc:["taekwondo"],age:"vanaf 7 jr",loc:"Dojang de Salamander, Schuytgraaf",desc:"ITF-taekwondo op woensdagavond; kinderen 8–12 gratis met Gelrepas, twee gratis proeflessen.",t:"wo 18:45–21:00",url:"https://www.sportinarnhem.nl/sport-bewegen/locaties-aanbieders/taekwon-do-academie-gelderland/"},
     {name:"Seraja Schreuder – Weerbaarheid & Taekwondo",city:["Arnhem"],disc:["taekwondo","kravmaga"],age:"jeugd",loc:"Arnhem",desc:"Taekwondo en weerbaarheidstraining voor kinderen en jongeren, in groepen of individueel.",url:"https://www.serajaschreuder.nl/"},
-    {name:"PR Boxing Arnhem",city:["Arnhem"],disc:["boksen","kickboksen"],age:"jeugd",loc:"Arnhem",desc:"Kleinschalige boksschool met apart jeugdboksen en jeugdkickboksen.",url:"https://pr-boxing.nl/"},
+    {name:"PR Boxing Arnhem",city:["Arnhem"],disc:["boksen","kickboksen"],age:"jeugd",loc:"Arnhem",desc:"Kleinschalige boksschool met apart jeugdboksen en jeugdkickboksen.",t:"boksen di/do 18:00–18:50 · kickboksen ma/wo 18:00–18:50 · 12–16 jr do 19:00–20:00",url:"https://pr-boxing.nl/"},
     {name:"Healthclub Heijenoord",city:["Arnhem"],disc:["boksen","kravmaga"],age:"jeugd 7–16 jr",loc:"Heijenoord",desc:"Bokszaktraining voor de jeugd en Krav Maga in leeftijdsgroepen 7–10, 11–13 en 14–16 jaar.",url:"https://www.healthclubheijenoord.nl/"},
     {name:"Kickboxing Arnhem",city:["Arnhem"],disc:["kickboksen","bjjmma"],age:"jeugd",loc:"Arnhem",desc:"Kickboksen/Muay Thai en MMA o.l.v. wereldkampioen Fred Royers; jeugd traint met leeftijdsgenoten.",url:"https://www.kickboxingarnhem.nl/kickboksen-jeugd"},
     {name:"Omar Gym",city:["Arnhem"],disc:["kickboksen"],age:"jeugd",loc:"Arnhem-Zuid",desc:"Kickboksschool in Arnhem-Zuid met jeugdtraining en aandacht voor coaching van jongeren.",url:"https://www.omargym.nl/"},
     {name:"Undergroundgym Arnhem",city:["Arnhem"],disc:["kickboksen"],age:"6–17 jr",loc:"Arnhem",desc:"Kickboksen voor de jeugd (6–17 jaar) in een laagdrempelige gym.",url:"https://undergroundgym.nl/kickboxing-voor-de-jeugd-in-arnhem/"},
-    {name:"FORTE Brazilian Jiu Jitsu",city:["Arnhem"],disc:["bjjmma"],age:"kids & teens",loc:"Arnhem",desc:"BJJ en grappling voor kids, teens en volwassenen; opgericht in 2023, warme clubcultuur.",url:"https://fortebjj.nl/"},
-    {name:"Vechtsportschool Fight Spirit",city:["Arnhem"],disc:["bjjmma","kickboksen"],age:"7–14 jr (BJJ Kids)",loc:"Van Oldenbarneveldtstraat",desc:"BJJ Kids (7–14 jr) op ma/wo/za, plus MMA en kickboksen; eerste les gratis, geen inschrijfgeld.",url:"https://bjjarnhem.nl/"},
-    {name:"Energia Martial Arts – Arnhem",city:["Arnhem"],disc:["bjjmma","kickboksen","capoeira","worstelen"],age:"vanaf 7 jr",loc:"Geitenkamp",desc:"BJJ Kids, MMA-jeugd, worstelen, capoeira en kickboksen; leden trainen mee op alle Energia-locaties.",url:"https://energia-martialarts.com/locatie/arnhem-geitenkamp/"},
+    {name:"FORTE Brazilian Jiu Jitsu",city:["Arnhem"],disc:["bjjmma"],age:"kids & teens",loc:"Arnhem",desc:"BJJ en grappling voor kids, teens en volwassenen; opgericht in 2023, warme clubcultuur.",t:"do 18:00–19:00 · za 11:00–12:00 (groep 12–14 jr); di 18:00–19:00 no-gi",url:"https://fortebjj.nl/"},
+    {name:"Vechtsportschool Fight Spirit",city:["Arnhem"],disc:["bjjmma","kickboksen"],age:"7–14 jr (BJJ Kids)",loc:"Van Oldenbarneveldtstraat",desc:"BJJ Kids (7–14 jr) op ma/wo/za, plus MMA en kickboksen; eerste les gratis, geen inschrijfgeld.",t:"ma 18:00–19:00 · za 11:00–12:00 (BJJ Kids 7–14 jr)",url:"https://bjjarnhem.nl/"},
+    {name:"Energia Martial Arts – Arnhem",city:["Arnhem"],disc:["bjjmma","kickboksen","capoeira","worstelen"],age:"vanaf 7 jr",loc:"Geitenkamp",desc:"BJJ Kids, MMA-jeugd, worstelen, capoeira en kickboksen; leden trainen mee op alle Energia-locaties.",t:"do 19:30–20:30 (MMA-jeugd); overige jeugdtijden: informeer bij club",url:"https://energia-martialarts.com/locatie/arnhem-geitenkamp/"},
     {name:"Koru Gym & Sandow Arnhem",city:["Arnhem"],disc:["worstelen","bjjmma","kickboksen"],age:"7–17 jr",loc:"Agnietenstraat",desc:"Worstelvereniging Sandow (sinds 1967): jeugd 7–12 en tieners 13–17, plus BJJ en kickboksen.",url:"https://korugym.nl/"},
-    {name:"De Worstelschool van Arnhem",city:["Arnhem"],disc:["worstelen"],age:"jeugd",loc:"Arnhem",desc:"Laagdrempelige worstellessen voor de jeugd; gratis proefles.",url:"https://worstelen.nl/locaties-en-lestijden/worstelen-in-arnhem/"},
+    {name:"De Worstelschool van Arnhem",city:["Arnhem"],disc:["worstelen"],age:"jeugd",loc:"Arnhem",desc:"Laagdrempelige worstellessen voor de jeugd; gratis proefles.",t:"wo 18:30–19:30 (Agnietenstraat)",url:"https://worstelen.nl/locaties-en-lestijden/worstelen-in-arnhem/"},
     {name:"Aikido Stichting Arnhem 'Jiki Shin Kan'",city:["Arnhem"],disc:["aikido"],age:"6–17 jr",loc:"Arnhem",desc:"Jeugd-aikido in meerdere groepen; nadruk op zelfvertrouwen zonder wedstrijd. Gratis met Gelrepas t/m 17 jr.",url:"https://aikidostichtingarnhem.nl/jeugd-aikido/"},
-    {name:"Aikido aan de Rijn",city:["Arnhem"],disc:["aikido"],age:"6–13 jr",loc:"Arnhem",desc:"Kinderlessen op donderdagmiddag: groep 6–9 jaar en groep 10–13 jaar.",url:"https://aikidoaanderijn.nl/aikido-voor-kinderen/"},
-    {name:"Kung Fu School Golden Dragon",city:["Arnhem","Regio"],disc:["kungfu"],age:"vanaf 9 jr",loc:"Arnhem (Nicolaas Maesstraat) & Oosterbeek",desc:"Traditionele kung fu; instroom vanaf 9 jaar, proefles mogelijk.",url:"https://www.sportinarnhem.nl/sport-bewegen/locaties-aanbieders/golden-dragon-arnhem/"},
-    {name:"Kung Fu School Chang Ho",city:["Arnhem"],disc:["kungfu"],age:"jeugd",loc:"3 locaties in Arnhem",desc:"Drie scholen in Arnhem; lessen op zaterdag- en zondagochtend en woensdagavond.",url:"https://www.kungfuchangho.nl/scholen/"},
+    {name:"Aikido aan de Rijn",city:["Arnhem"],disc:["aikido"],age:"6–13 jr",loc:"Arnhem",desc:"Kinderlessen op donderdagmiddag: groep 6–9 jaar en groep 10–13 jaar.",t:"do-middag (groepen 6–9 en 10–13 jr; 14 jr = grens)",url:"https://aikidoaanderijn.nl/aikido-voor-kinderen/"},
+    {name:"Kung Fu School Golden Dragon",city:["Arnhem","Regio"],disc:["kungfu"],age:"vanaf 9 jr",loc:"Arnhem (Nicolaas Maesstraat) & Oosterbeek",desc:"Traditionele kung fu; instroom vanaf 9 jaar, proefles mogelijk.",t:"za 10:00–12:00 (proefles)",url:"https://www.sportinarnhem.nl/sport-bewegen/locaties-aanbieders/golden-dragon-arnhem/"},
+    {name:"Kung Fu School Chang Ho",city:["Arnhem"],disc:["kungfu"],age:"jeugd",loc:"3 locaties in Arnhem",desc:"Drie scholen in Arnhem; lessen op zaterdag- en zondagochtend en woensdagavond.",t:"wo 19:30–21:30 · za 10:00–12:00 · zo 10:30–12:30",url:"https://www.kungfuchangho.nl/scholen/"},
     {name:"Shaolin Kung Fu Instituut Tinpo",city:["Arnhem","Nijmegen"],disc:["kungfu"],age:"jeugd",loc:"Arnhem, Nijmegen & Utrecht",desc:"Traditioneel Shaolin kung fu met lessen, workshops en demo's in Arnhem én Nijmegen.",url:"http://www.vechtkunst.com/"},
-    {name:"Wing Chun Kung Fu Arnhem",city:["Arnhem"],disc:["kungfu"],age:"jeugd (kinderprogramma NWCF)",loc:"Arnhem",desc:"Wing Chun als realistische zelfverdediging; de Nederlandse Wing Chun Federatie heeft een apart kinderprogramma.",url:"https://vechtsportschoolarnhem.nl/"},
+    {name:"Wing Chun Kung Fu Arnhem",city:["Arnhem"],disc:["kungfu"],age:"jeugd (kinderprogramma NWCF)",loc:"Arnhem",desc:"Wing Chun als realistische zelfverdediging; de Nederlandse Wing Chun Federatie heeft een apart kinderprogramma.",t:"ma 19:30–21:30 (vanaf ±14 jr; geen aparte jeugdgroep in Arnhem)",url:"https://vechtsportschoolarnhem.nl/"},
     {name:"Krav Maga Arnhem",city:["Arnhem"],disc:["kravmaga"],age:"jeugd",loc:"Arnhem",desc:"Zelfverdediging volgens het Krav Maga-systeem.",url:"http://kravmagaarnhem.nl/"},
-    {name:"Capoeira4All / Batuque Capoeira – Arnhem",city:["Arnhem"],disc:["capoeira"],age:"alle leeftijden",loc:"Menno van Coehoornkazerne (station Velperpoort)",desc:"Wekelijkse kinderlessen capoeira o.l.v. Contramestre Chris; ook maandag bij zaal La Cappella.",url:"https://capoeira4all.nl/arnhem/"},
-    {name:"Kendo Kai Higashi",city:["Arnhem"],disc:["kendo"],age:"jeugd",loc:"Arnhem",desc:"Kendo, iaido, jodo en Katori Shinto Ryu kenjutsu; sinds 1988. Jeugd met Gelrepas vrijwel gratis.",url:"https://www.kendokai-higashi.nl/"},
+    {name:"Capoeira4All / Batuque Capoeira – Arnhem",city:["Arnhem"],disc:["capoeira"],age:"alle leeftijden",loc:"Menno van Coehoornkazerne (station Velperpoort)",desc:"Wekelijkse kinderlessen capoeira o.l.v. Contramestre Chris; ook maandag bij zaal La Cappella.",t:"ma 18:30–19:30 (kinderen) · do avond (jeugd 12+, Wijkcentrum De Ster)",url:"https://capoeira4all.nl/arnhem/"},
+    {name:"Kendo Kai Higashi",city:["Arnhem"],disc:["kendo"],age:"jeugd",loc:"Arnhem",desc:"Kendo, iaido, jodo en Katori Shinto Ryu kenjutsu; sinds 1988. Jeugd met Gelrepas vrijwel gratis.",t:"di 20:00–22:00 · za 10:00–12:00 (geen aparte jeugdgroep)",url:"https://www.kendokai-higashi.nl/"},
     {name:"Budovereniging On Ko Chi Shin",city:["Arnhem","Nijmegen"],disc:["kendo"],age:"jeugd",loc:"Dojo's in Arnhem én Nijmegen",desc:"Kendo, iaido en jodo met dojo's in beide steden; regelmatig beginnerscursussen.",url:"https://onkochishin.nl/"},
 
     // ============ NIJMEGEN ============
-    {name:"Judo Academy Nijmegen",city:["Nijmegen","Regio"],disc:["judo"],age:"vanaf 4 jr",loc:"o.a. 't Hert, Hatert, Overasselt",desc:"Recreatief en wedstrijdjudo vanaf 4 jaar; veel spel, beweging en een positieve sfeer.",url:"https://www.judonijmegen.nl/jeugd-judo"},
-    {name:"Judoschool Theunissen",city:["Nijmegen","Regio"],disc:["judo"],age:"4–12 jr (grootste groep)",loc:"11 locaties in Nijmegen e.o. (o.a. Beek-Ubbergen)",desc:"Kleuter- en tumbeljudo voor de jongsten; bijna elke locatie toegankelijk, twee gratis proeflessen.",url:"https://judo-nederland.nl/judoschool-theunissen/"},
-    {name:"Nijmeegse Judo (en Jiu-Jitsu) Vereniging",city:["Nijmegen"],disc:["judo","jiujitsu"],age:"judo vanaf 5, jiu-jitsu vanaf 8 jr",loc:"Fagelstraat, Nijmegen-Oost",desc:"Judo vanaf circa 5 jaar en jiu-jitsu vanaf 8 jaar; woensdag verschillende leeftijdsgroepen.",url:"https://njv-judo.nl/"},
-    {name:"Stichting Top Judo Nijmegen (STJN)",city:["Nijmegen"],disc:["judo"],age:"wedstrijd, vanaf 11 jr",loc:"SportQube, Sportpark de Dennen",desc:"Wedstrijdgerichte talentopleiding voor judoka's vanaf 11 jaar; dojo van 450 m² met verende vloer.",url:"https://www.stjn.nl/"},
-    {name:"Tomoda",city:["Nijmegen","Regio"],disc:["judo","karate"],age:"judo vanaf 4, karate 8–17 jr",loc:"Nijmegen & Beuningen",desc:"Judo vanaf 4 jaar en karate voor 8–17 jaar; ook Rots & Water-weerbaarheidstraining.",url:"https://www.tomoda.nl/"},
+    {name:"Judo Academy Nijmegen",city:["Nijmegen","Regio"],disc:["judo"],age:"vanaf 4 jr",loc:"o.a. 't Hert, Hatert, Overasselt",desc:"Recreatief en wedstrijdjudo vanaf 4 jaar; veel spel, beweging en een positieve sfeer.",t:"ma 17:30–19:15 · vr 18:00–20:00 (jeugdselectie/wedstrijd, 't Hert)",url:"https://www.judonijmegen.nl/jeugd-judo"},
+    {name:"Judoschool Theunissen",city:["Nijmegen","Regio"],disc:["judo"],age:"4–12 jr (grootste groep)",loc:"11 locaties in Nijmegen e.o. (o.a. Beek-Ubbergen)",desc:"Kleuter- en tumbeljudo voor de jongsten; bijna elke locatie toegankelijk, twee gratis proeflessen.",t:"vooral 4–12 jr; oudere jeugd: informeer per locatie",url:"https://judo-nederland.nl/judoschool-theunissen/"},
+    {name:"Nijmeegse Judo (en Jiu-Jitsu) Vereniging",city:["Nijmegen"],disc:["judo","jiujitsu"],age:"judo vanaf 5, jiu-jitsu vanaf 8 jr",loc:"Fagelstraat, Nijmegen-Oost",desc:"Judo vanaf circa 5 jaar en jiu-jitsu vanaf 8 jaar; woensdag verschillende leeftijdsgroepen.",t:"wo (leeftijdsgroepen); exacte tijden: informeer bij club",url:"https://njv-judo.nl/"},
+    {name:"Stichting Top Judo Nijmegen (STJN)",city:["Nijmegen"],disc:["judo"],age:"wedstrijd, vanaf 11 jr",loc:"SportQube, Sportpark de Dennen",desc:"Wedstrijdgerichte talentopleiding voor judoka's vanaf 11 jaar; dojo van 450 m² met verende vloer.",t:"ma 17:15–18:45 · do 18:00–21:00 (randori, groep –15 jr); ochtendtraining ma–wo",url:"https://www.stjn.nl/"},
+    {name:"Tomoda",city:["Nijmegen","Regio"],disc:["judo","karate"],age:"judo vanaf 4, karate 8–17 jr",loc:"Nijmegen & Beuningen",desc:"Judo vanaf 4 jaar en karate voor 8–17 jaar; ook Rots & Water-weerbaarheidstraining.",t:"judo wo 18:15–19:30 · do 18:00–19:00 (12–17 jr) · karate di 19:00–20:00 · za 10:00–11:00",url:"https://www.tomoda.nl/"},
     {name:"Judovereniging Dukenburg",city:["Nijmegen"],disc:["judo"],age:"jeugd",loc:"Lindenholt / Dukenburg",desc:"Judolessen voor jeugd en volwassenen in Nijmegen-West.",url:"https://www.kidsproof.nl/nijmegen/uitje/judo-vereniging-dukenburg-judoles-kinderen-lindenholt/"},
     {name:"Judo Ryu Ichidai",city:["Nijmegen"],disc:["judo"],age:"jeugd",loc:"Nijmegen",desc:"Judoschool met nadruk op stijlvol judo. Let op: niet (meer) aangesloten bij de Judo Bond Nederland.",url:"https://www.judoryuichidai.com/"},
-    {name:"Trainingscentrum Michi",city:["Nijmegen"],disc:["karate"],age:"vanaf 5 jr",loc:"Nijmegen (Staddijk 41) & Lent (De Ster)",desc:"Okinawa Goju-Ryu karate-do, niet wedstrijdgericht; jeugd vanaf 5 jaar met nadruk op plezier en respect. Gratis proefles.",url:"https://www.trainingscentrum-michi.nl/karate-Nijmegen"},
-    {name:"SEFI Karateschool",city:["Nijmegen","Regio"],disc:["karate"],age:"vanaf 7 jr",loc:"Nijmegen en omgeving",desc:"Jeugdgroep vanaf 7 jaar; lichaamsbesef, zelfverdediging en respect, speels aangeboden.",url:"https://www.sefi.nl/karate-nijmegen/"},
-    {name:"Daruma Ryu",city:["Nijmegen"],disc:["karate","jiujitsu"],age:"zelfverdediging vanaf 13 jr",loc:"Nijmegen",desc:"Karate (Go Yu Ryu / Shotokan) als krijgskunst, plus een weerbaarheids- en zelfverdedigingscursus vanaf 13 jaar.",url:"https://www.darumaryu.nl/"},
-    {name:"Kyokushin Nijmegen – Dojo Tenaga",city:["Nijmegen"],disc:["karate"],age:"vanaf 12 jr",loc:"Wijkcentrum Hatert",desc:"Full-contact Kyokushin-karate; jeugd vanaf 12 jaar, contributie €15/mnd voor kinderen t/m 12.",url:"https://www.kyokushinnijmegen.nl/"},
+    {name:"Trainingscentrum Michi",city:["Nijmegen"],disc:["karate"],age:"vanaf 5 jr",loc:"Nijmegen (Staddijk 41) & Lent (De Ster)",desc:"Okinawa Goju-Ryu karate-do, niet wedstrijdgericht; jeugd vanaf 5 jaar met nadruk op plezier en respect. Gratis proefles.",t:"di/do 19:00–20:00 (Nijmegen, 12–17 jr) · vr 18:45–20:00 (Lent)",url:"https://www.trainingscentrum-michi.nl/karate-Nijmegen"},
+    {name:"SEFI Karateschool",city:["Nijmegen","Regio"],disc:["karate"],age:"vanaf 7 jr",loc:"Nijmegen en omgeving",desc:"Jeugdgroep vanaf 7 jaar; lichaamsbesef, zelfverdediging en respect, speels aangeboden.",t:"jeugd di 18:30–19:30 · do 18:00–19:30 (t/m 12 jr); 13+ in de seniorengroep",url:"https://www.sefi.nl/karate-nijmegen/"},
+    {name:"Daruma Ryu",city:["Nijmegen"],disc:["karate","jiujitsu"],age:"zelfverdediging vanaf 13 jr",loc:"Nijmegen",desc:"Karate (Go Yu Ryu / Shotokan) als krijgskunst, plus een weerbaarheids- en zelfverdedigingscursus vanaf 13 jaar.",t:"ma/do 19:00–20:00 (karate); zelfverdedigingscursus 13+: informeer bij club",url:"https://www.darumaryu.nl/"},
+    {name:"Kyokushin Nijmegen – Dojo Tenaga",city:["Nijmegen"],disc:["karate"],age:"vanaf 12 jr",loc:"Wijkcentrum Hatert",desc:"Full-contact Kyokushin-karate; jeugd vanaf 12 jaar, contributie €15/mnd voor kinderen t/m 12.",t:"ma 17:30–18:30 (jeugd 12+)",url:"https://www.kyokushinnijmegen.nl/"},
     {name:"KarateDo Nijmegen",city:["Nijmegen"],disc:["karate"],age:"informeer naar jeugd",loc:"Nijmegen",desc:"Traditioneel Shotokan-karate (JKA/JKS Benelux); vooral gericht op volwassenen — vraag naar jeugdmogelijkheden.",url:"http://www.karatedo-nijmegen.nl/"},
     {name:"Shotokan Karate Kuroshiro",city:["Nijmegen"],disc:["karate"],age:"jeugd",loc:"Nijmegen",desc:"Een van de weinige Shotokan-clubs in Nijmegen, o.l.v. een gecertificeerde karateleraar.",url:"https://kuroshiro.nl/"},
-    {name:"Sportinstituut Tom van der Kolk",city:["Nijmegen"],disc:["karate","judo"],age:"jeugd",loc:"Nijmegen",desc:"Jeugd-karate en judolessen bij een breed sport- en gezondheidsinstituut.",url:"https://tomvanderkolk.nl/jeugdsporten/jeugd-karate"},
-    {name:"Yoo Sin",city:["Nijmegen"],disc:["taekwondo"],age:"jeugd",loc:"Heidebloemstraat, Nijmegen",desc:"Vereniging voor taekwondo en hanmudo; organiseert het nationale Yoo Sin-jeugdtoernooi in de Jan Massinkhal.",url:"https://yoosin.nl/"},
+    {name:"Sportinstituut Tom van der Kolk",city:["Nijmegen"],disc:["karate","judo"],age:"jeugd",loc:"Nijmegen",desc:"Jeugd-karate en judolessen bij een breed sport- en gezondheidsinstituut.",t:"jeugd-judo 6–12 jr; jeugd-karate vanaf 6 jr — tijden: informeer bij club",url:"https://tomvanderkolk.nl/jeugdsporten/jeugd-karate"},
+    {name:"Yoo Sin",city:["Nijmegen"],disc:["taekwondo"],age:"jeugd",loc:"Heidebloemstraat, Nijmegen",desc:"Vereniging voor taekwondo en hanmudo; organiseert het nationale Yoo Sin-jeugdtoernooi in de Jan Massinkhal.",t:"wo · vr (junioren); exacte tijden: zie yoosin.nl/rooster",url:"https://yoosin.nl/"},
     {name:"Taekwon-Do Centre Nijmegen",city:["Nijmegen"],disc:["taekwondo"],age:"jeugd",loc:"Nijmegen",desc:"Gespecialiseerd in de Koreaanse krijgskunst ITF-Taekwon-Do.",url:"https://www.facebook.com/tcnijmegen024/"},
     {name:"Toon Je Kracht",city:["Nijmegen"],disc:["taekwondo","kravmaga"],age:"jeugd",loc:"Nijmegen",desc:"Taekwondo, zelfverdediging en weerbaarheidsclinics, ook op basisscholen door heel Nijmegen.",url:"https://www.toonjekracht.nl/"},
-    {name:"NABA Boxing Nijmegen",city:["Nijmegen"],disc:["boksen"],age:"jeugd",loc:"Nijmegen",desc:"Nijmeegse Amateur Boks Associatie (1947), oudste boksschool van de stad; aparte jeugdtraining, Fight Right-gecertificeerd.",url:"https://naba.nl/trainingen/jeugdtraining/"},
+    {name:"NABA Boxing Nijmegen",city:["Nijmegen"],disc:["boksen"],age:"jeugd",loc:"Nijmegen",desc:"Nijmeegse Amateur Boks Associatie (1947), oudste boksschool van de stad; aparte jeugdtraining, Fight Right-gecertificeerd.",t:"ma/wo/vr 17:30–18:30 (Jeugd 1 & 2, 8–16 jr)",url:"https://naba.nl/trainingen/jeugdtraining/"},
     {name:"Boksfabriek Nijmegen",city:["Nijmegen"],disc:["boksen"],age:"7–14 jr",loc:"Nijmegen",desc:"Boksschool van oud-kampioen Willy van Haaren; jeugd 7–11 en junioren 12–14 jaar.",url:"https://boksfabriek.nl/portfolio/jeugd-junioren-bokstraining/"},
-    {name:"Boxing Bootcamp Nijmegen",city:["Nijmegen"],disc:["boksen"],age:"jeugd",loc:"Nijmegen-West",desc:"Moderne bokstraining voor jeugd, studenten, vrouwen en mannen.",url:"https://boxingbootcampnijmegen.nl/"},
-    {name:"The Boxing Arena (Mattiz Gym)",city:["Nijmegen"],disc:["boksen","kickboksen"],age:"jeugd / wedstrijd",loc:"Nijmegen",desc:"Boks- en kickboks/Thaiboks-training met jeugd- en jeugdwedstrijdklassen (N/C/B/A).",url:"https://www.theboxingarena.com/"},
-    {name:"Kickboxing Nijmegen",city:["Nijmegen"],disc:["kickboksen"],age:"jeugd",loc:"Nijmegen",desc:"Jeugdlessen met persoonlijke aandacht en indeling op niveau; proefles via de site.",url:"https://www.kickboxingnijmegen.nl/"},
+    {name:"Boxing Bootcamp Nijmegen",city:["Nijmegen"],disc:["boksen"],age:"jeugd",loc:"Nijmegen-West",desc:"Moderne bokstraining voor jeugd, studenten, vrouwen en mannen.",t:"do 18:00–18:45 (Jonge Krijgers)",url:"https://boxingbootcampnijmegen.nl/"},
+    {name:"The Boxing Arena (Mattiz Gym)",city:["Nijmegen"],disc:["boksen","kickboksen"],age:"jeugd / wedstrijd",loc:"Nijmegen",desc:"Boks- en kickboks/Thaiboks-training met jeugd- en jeugdwedstrijdklassen (N/C/B/A).",t:"kickboksen 14+ di 20:05–21:00 · vr 18:50–19:50 · MMA 14+ wo/vr 20:00–20:50",url:"https://www.theboxingarena.com/"},
+    {name:"Kickboxing Nijmegen",city:["Nijmegen"],disc:["kickboksen"],age:"jeugd",loc:"Nijmegen",desc:"Jeugdlessen met persoonlijke aandacht en indeling op niveau; proefles via de site.",t:"ma/wo/do 18:00–18:50 (jeugd 10–15 jr)",url:"https://www.kickboxingnijmegen.nl/"},
     {name:"The Kickboxing Society Nijmegen",city:["Nijmegen"],disc:["kickboksen"],age:"vanaf 8 jr",loc:"Oude Graafseweg",desc:"Kinderlessen vanaf 8 jaar in een kindvriendelijke sfeer, gericht op weerbaarheid; gratis proefles.",url:"https://thekickboxingsociety.com/locaties/nijmegen/kickboksen-voor-kinderen-in-nijmegen/"},
     {name:"Kickboksschool van Nijmegen",city:["Nijmegen"],disc:["kickboksen"],age:"t/m 16 jr",loc:"Nijmegen",desc:"Jeugdlessen (t/m 16 jaar), indeling op leeftijd; €17,50 p/m voor één training per week.",url:"https://kickboks.school/locaties-en-lestijden/kickboksen-in-nijmegen/"},
     {name:"Kickboksen voor Kinderen (KVK) Nijmegen",city:["Nijmegen"],disc:["kickboksen"],age:"vanaf 6 jr",loc:"Nijmegen",desc:"Kinderkickboksen vanaf 6 jaar, geen wedstrijdverplichting; gratis proefles.",url:"https://kickboksenvoorkinderen.nl/locaties-lestijden/kickboksen-voor-kinderen-in-nijmegen/"},
-    {name:"Riverland Healthcentre",city:["Nijmegen"],disc:["kickboksen"],age:"7–12 jr",loc:"Nijmegen",desc:"Jeugdkickboksen (7–12 jr) o.l.v. een meervoudig wereldkampioen (MMA/Muay Thai/kickboksen); gratis proefles.",url:"https://riverlandhealthcentre.nl/kickboksen-jeugd/"},
+    {name:"Riverland Healthcentre",city:["Nijmegen"],disc:["kickboksen"],age:"7–12 jr",loc:"Nijmegen",desc:"Jeugdkickboksen (7–12 jr) o.l.v. een meervoudig wereldkampioen (MMA/Muay Thai/kickboksen); gratis proefles.",t:"di/vr 18:00–19:00 (7–12 jr; 14 jr = grens)",url:"https://riverlandhealthcentre.nl/kickboksen-jeugd/"},
     {name:"Cheng Hsin Nijmegen",city:["Nijmegen"],disc:["kickboksen","boksen"],age:"elke leeftijd",loc:"Nijmegen",desc:"(Kick)boksen, plus tai chi chuan en 'effortless power', voor elke leeftijd; gratis proefmaand.",url:"https://www.chenghsin.nl/boksen-nijmegen-kickboksen/"},
-    {name:"Energia Martial Arts – Nijmegen",city:["Nijmegen"],disc:["bjjmma","kickboksen","capoeira","worstelen","judo"],age:"vanaf 7 jr",loc:"De Vasim, De Kolk 18",desc:"BJJ Kids, MMA-jeugd, worstelen, judo en capoeira in het industriële pand De Vasim.",url:"https://energia-martialarts.com/locatie/nijmegen/"},
+    {name:"Energia Martial Arts – Nijmegen",city:["Nijmegen"],disc:["bjjmma","kickboksen","capoeira","worstelen","judo"],age:"vanaf 7 jr",loc:"De Vasim, De Kolk 18",desc:"BJJ Kids, MMA-jeugd, worstelen, judo en capoeira in het industriële pand De Vasim.",t:"BJJ di 17:00–18:00 · MMA-jeugd wo 17:45–18:45 · judo wo 16:30–17:30",url:"https://energia-martialarts.com/locatie/nijmegen/"},
     {name:"Sportscentre Fudochi",city:["Nijmegen"],disc:["jiujitsu","kickboksen","boksen","bjjmma","judo"],age:"vanaf 3 jr",loc:"Tweede Oude Heselaan 183A",desc:"Familiesportcentrum met jiu-jitsu, judo, (kick)boksen, BJJ, MMA en grappling; jeugd jiu-jitsu vanaf 7 jaar.",url:"https://www.fudochi.nl/budosporten-nijmegen/"},
     {name:"MMA School Nijmegen",city:["Nijmegen"],disc:["bjjmma"],age:"jeugd",loc:"Nijmegen",desc:"MMA-training voor beginners en gevorderden, onderdeel van een landelijk netwerk van MMA-scholen.",url:"https://nl.mma.school/locaties/nijmegen/"},
-    {name:"Jita Kyoei Budo",city:["Nijmegen"],disc:["jiujitsu","aikido","judo","karate"],age:"4–12 jr",loc:"Nijmegen",desc:"'Junior Ninja Training' voor 4–12 jaar: weerbaarheid met technieken uit aikido, jiujitsu, judo, tai ki ken do en karate.",url:"https://www.kidsproof.nl/nijmegen/uitje/jita-kyoei-budo-nijmegen-junior-ninja-training-weerbaarheid/"},
-    {name:"Aikido Centrum Nijmegen",city:["Nijmegen","Regio"],disc:["aikido"],age:"vanaf 5 jr",loc:"Nijmegen, Waalsprong & Druten + SportQube",desc:"Kinderen vanaf 5 jaar; lessen op woensdagmiddag en zaterdagochtend, ook in de Waalsprong en Druten.",url:"https://aikidocentrumnijmegen.nl/jeugd/"},
-    {name:"Ki-Aikido Centrum Nijmegen",city:["Nijmegen"],disc:["aikido"],age:"vanaf 5–7 jr",loc:"Nijmegen",desc:"Jeugdlessen woensdagmiddag en zaterdagochtend; een ouder mag meetrainen. Gratis proefles.",url:"https://www.kiaikidocentrum.nl/Ki-Aikido_Centrum/Jeugd.html"},
-    {name:"Aikidovereniging Kokoro",city:["Nijmegen"],disc:["aikido"],age:"informeer naar jeugd",loc:"Nijmegen",desc:"Aikidovereniging in Nijmegen met gekwalificeerde leraren.",url:"https://www.aikidonijmegen.nl/"},
-    {name:"Kung Fu Nijmegen",city:["Nijmegen"],disc:["kungfu"],age:"jeugd",loc:"Nijmegen",desc:"Traditionele kung fu school in Nijmegen; ook Wing Chun-seminars.",url:"https://www.kungfunijmegen.nl/"},
-    {name:"Art of Shaolin",city:["Nijmegen"],disc:["kungfu"],age:"vanaf 7 jr",loc:"Nijmegen",desc:"Shaolin kung fu en sanda (Chinees kickboksen); kids-groep vanaf 7 jaar, gratis proefles, ondersteuning via Stichting Leergeld mogelijk.",url:"https://shaolinnijmegen.nl/shaolin-kids"},
-    {name:"Shaolin Kung Fu School Kung Tao",city:["Nijmegen","Regio"],disc:["kungfu"],age:"alle leeftijden",loc:"Nijmegen (Uranusstraat) & Malden",desc:"Shaolin kung fu sinds 1996, inclusief wapens als stok en zwaard; gratis proefles.",url:"http://www.kungtao.nl/"},
+    {name:"Jita Kyoei Budo",city:["Nijmegen"],disc:["jiujitsu","aikido","judo","karate"],age:"4–12 jr",loc:"Nijmegen",desc:"'Junior Ninja Training' voor 4–12 jaar: weerbaarheid met technieken uit aikido, jiujitsu, judo, tai ki ken do en karate.",t:"gericht op 4–12 jr; 14 jr valt buiten de doelgroep",url:"https://www.kidsproof.nl/nijmegen/uitje/jita-kyoei-budo-nijmegen-junior-ninja-training-weerbaarheid/"},
+    {name:"Aikido Centrum Nijmegen",city:["Nijmegen","Regio"],disc:["aikido"],age:"vanaf 5 jr",loc:"Nijmegen, Waalsprong & Druten + SportQube",desc:"Kinderen vanaf 5 jaar; lessen op woensdagmiddag en zaterdagochtend, ook in de Waalsprong en Druten.",t:"wo-middag · za-ochtend (exacte tijd per locatie)",url:"https://aikidocentrumnijmegen.nl/jeugd/"},
+    {name:"Ki-Aikido Centrum Nijmegen",city:["Nijmegen"],disc:["aikido"],age:"vanaf 5–7 jr",loc:"Nijmegen",desc:"Jeugdlessen woensdagmiddag en zaterdagochtend; een ouder mag meetrainen. Gratis proefles.",t:"wo-middag · za-ochtend",url:"https://www.kiaikidocentrum.nl/Ki-Aikido_Centrum/Jeugd.html"},
+    {name:"Aikidovereniging Kokoro",city:["Nijmegen"],disc:["aikido"],age:"informeer naar jeugd",loc:"Nijmegen",desc:"Aikidovereniging in Nijmegen met gekwalificeerde leraren.",t:"ma 19:30–21:00 · do 20:00–21:30 (geen aparte jeugdgroep)",url:"https://www.aikidonijmegen.nl/"},
+    {name:"Kung Fu Nijmegen",city:["Nijmegen"],disc:["kungfu"],age:"jeugd",loc:"Nijmegen",desc:"Traditionele kung fu school in Nijmegen; ook Wing Chun-seminars.",t:"ma/wo 19:00–20:30 (vanaf 12 jr, geen aparte jeugdgroep)",url:"https://www.kungfunijmegen.nl/"},
+    {name:"Art of Shaolin",city:["Nijmegen"],disc:["kungfu"],age:"vanaf 7 jr",loc:"Nijmegen",desc:"Shaolin kung fu en sanda (Chinees kickboksen); kids-groep vanaf 7 jaar, gratis proefles, ondersteuning via Stichting Leergeld mogelijk.",t:"do 18:15–19:45",url:"https://shaolinnijmegen.nl/shaolin-kids"},
+    {name:"Shaolin Kung Fu School Kung Tao",city:["Nijmegen","Regio"],disc:["kungfu"],age:"alle leeftijden",loc:"Nijmegen (Uranusstraat) & Malden",desc:"Shaolin kung fu sinds 1996, inclusief wapens als stok en zwaard; gratis proefles.",t:"di 20:00–21:30 (Nijmegen) · vr 19:15–20:45 (Malden)",url:"http://www.kungtao.nl/"},
     {name:"Tri Bhakti Nederland",city:["Nijmegen"],disc:["kungfu"],age:"jeugd",loc:"Nijmegen",desc:"Pencak Silat voor beginners en gevorderden.",url:"https://www.facebook.com/TriBhaktiNederland/"},
-    {name:"Wing Chun Nijmegen",city:["Nijmegen"],disc:["kungfu"],age:"jeugd (kinderprogramma NWCF)",loc:"Nijmegen",desc:"Wing Chun kung fu als reflexieve zelfverdediging; aangesloten bij de Nederlandse Wing Chun Federatie.",url:"https://vechtsportschoolnijmegen.nl/"},
+    {name:"Wing Chun Nijmegen",city:["Nijmegen"],disc:["kungfu"],age:"jeugd (kinderprogramma NWCF)",loc:"Nijmegen",desc:"Wing Chun kung fu als reflexieve zelfverdediging; aangesloten bij de Nederlandse Wing Chun Federatie.",t:"vanaf ±13 jr; geen aparte kinder-/jeugdgroep in Nijmegen",url:"https://vechtsportschoolnijmegen.nl/"},
     {name:"KMG Nijmegen (Krav Maga Global)",city:["Nijmegen"],disc:["kravmaga"],age:"kids",loc:"Nijmegen",desc:"Kids Krav Maga: zelfverdediging spelenderwijs, met aandacht voor discipline, zelfvertrouwen en veiligheid.",url:"https://www.kmg-nijmegen.nl/"},
-    {name:"Institute Krav Maga Netherlands (IKMN)",city:["Nijmegen","Regio"],disc:["kravmaga"],age:"tieners 11–15 jr",loc:"3 stadsdelen + Lent + Elst",desc:"Ruim 30 lessen per week; aparte tienergroep 11–15 jaar, ook in Lent en Elst.",url:"https://institute-kravmaga.nl/"},
-    {name:"Capoeira4All / Batuque Capoeira – Nijmegen",city:["Nijmegen"],disc:["capoeira"],age:"alle leeftijden",loc:"Gymzaal Uranusstraat",desc:"Wekelijkse kinderlessen capoeira aan de Uranusstraat, o.l.v. Contramestre Chris.",url:"https://capoeira4all.nl/nijmegen/"},
+    {name:"Institute Krav Maga Netherlands (IKMN)",city:["Nijmegen","Regio"],disc:["kravmaga"],age:"tieners 11–15 jr",loc:"3 stadsdelen + Lent + Elst",desc:"Ruim 30 lessen per week; aparte tienergroep 11–15 jaar, ook in Lent en Elst.",t:"Tiener Krav 11–15 jr: ma/di/wo 18:30–20:00 (Nijmegen) · wo 19:15–20:15 (Lent) · vr 19:15–20:15 (Oosterhout)",url:"https://institute-kravmaga.nl/"},
+    {name:"Capoeira4All / Batuque Capoeira – Nijmegen",city:["Nijmegen"],disc:["capoeira"],age:"alle leeftijden",loc:"Gymzaal Uranusstraat",desc:"Wekelijkse kinderlessen capoeira aan de Uranusstraat, o.l.v. Contramestre Chris.",t:"za 09:30–10:30 (kinderen)",url:"https://capoeira4all.nl/nijmegen/"},
     {name:"Capoeira Reversão Nijmegen",city:["Nijmegen"],disc:["capoeira"],age:"jeugd",loc:"Nijmegen",desc:"Capoeira-groep binnen een internationale capoeira-organisatie.",url:"http://www.capoeirareversao.nl/nijmegen2.html"},
-    {name:"Worstelclub Nijmegen",city:["Nijmegen"],disc:["worstelen"],age:"jeugd",loc:"Fagelstraat, Nijmegen-Oost",desc:"Freestyle worstelen (onderdeel van de Nijmeegse Judo Vereniging): warming-up, techniek en sparren.",url:"https://www.worstelclubnijmegen.nl/"},
-    {name:"De Worstelschool van Nijmegen",city:["Nijmegen"],disc:["worstelen"],age:"jeugd",loc:"Nijmegen & Nijmegen-Noord",desc:"Worstellessen op meerdere locaties in de stad; gratis proefles.",url:"https://worstelen.nl/locaties-en-lestijden/worstelen-in-nijmegen/"},
+    {name:"Worstelclub Nijmegen",city:["Nijmegen"],disc:["worstelen"],age:"jeugd",loc:"Fagelstraat, Nijmegen-Oost",desc:"Freestyle worstelen (onderdeel van de Nijmeegse Judo Vereniging): warming-up, techniek en sparren.",t:"di 17:45–18:45 · vr 16:30–17:30 (Fagelstraat)",url:"https://www.worstelclubnijmegen.nl/"},
+    {name:"De Worstelschool van Nijmegen",city:["Nijmegen"],disc:["worstelen"],age:"jeugd",loc:"Nijmegen & Nijmegen-Noord",desc:"Worstellessen op meerdere locaties in de stad; gratis proefles.",t:"di 17:45–18:45 · vr 16:30–17:30 (Fagelstraat); Noord: informeer bij club",url:"https://worstelen.nl/locaties-en-lestijden/worstelen-in-nijmegen/"},
 
     // ============ REGIO ============
-    {name:"Budovereniging Elst",city:["Regio"],disc:["judo","taekwondo","kickboksen","bjjmma","jiujitsu"],age:"tuimelen t/m tiener",loc:"Elst (Overbetuwe)",desc:"Al 50+ jaar; kickboksen, MMA, grappling, judo, kempo, taekwondo, jiu-jitsu en tuimellessen onder één dak.",url:"https://www.budovereniging-elst.nl/"},
-    {name:"Way of Defense",city:["Regio"],disc:["taekwondo"],age:"jeugd",loc:"Elst",desc:"TaeKwonDo en Hapkido met een jeugdgroep op woensdagavond; Elst, precies tussen beide steden.",url:"https://wayofdefense.nl/"},
+    {name:"Budovereniging Elst",city:["Regio"],disc:["judo","taekwondo","kickboksen","bjjmma","jiujitsu"],age:"tuimelen t/m tiener",loc:"Elst (Overbetuwe)",desc:"Al 50+ jaar; kickboksen, MMA, grappling, judo, kempo, taekwondo, jiu-jitsu en tuimellessen onder één dak.",t:"kickboksen wo 20:10–21:10 · vr 20:30–21:45 · MMA vr 20:30–21:40 (vanaf 14 jr)",url:"https://www.budovereniging-elst.nl/"},
+    {name:"Way of Defense",city:["Regio"],disc:["taekwondo"],age:"jeugd",loc:"Elst",desc:"TaeKwonDo en Hapkido met een jeugdgroep op woensdagavond; Elst, precies tussen beide steden.",t:"wo-avond (jeugd); site verhuisd naar spartanwarriors.nl",url:"https://wayofdefense.nl/"},
     {name:"Judokwai Huissen / Bemmel",city:["Regio"],disc:["judo"],age:"jeugd",loc:"Huissen & Bemmel (Lingewaard)",desc:"Recreatieve judovereniging met jeugdgroepen; ook toegankelijk voor sporters met een beperking.",url:"http://judokwai-huissen-bemmel.nl/"},
-    {name:"Judovereniging Heumen",city:["Regio"],disc:["judo"],age:"jeugd",loc:"Malden / Overasselt",desc:"Judovereniging sinds 1972 met leden uit Malden, Heumen, Overasselt, Mook en omgeving.",url:"https://judoverenigingheumen.nl/"},
-    {name:"Judo en Jiu-Jitsu Groesbeek",city:["Regio"],disc:["judo","jiujitsu"],age:"jeugd",loc:"Sportpark Zuid, Groesbeek",desc:"Judovereniging in Groesbeek; organiseert al bijna 40 jaar het judotoernooi Groesbeek.",url:"http://judogroesbeek.nl/"},
-    {name:"WIK Rheden",city:["Regio"],disc:["judo"],age:"vanaf 3 jr",loc:"WIK-huis, IJsselsingel 95, Rheden",desc:"Judo voor kinderen op woensdag: aparte groepen vanaf 3 jaar en vanaf 7 jaar. Proefles mogelijk.",url:"https://www.wikrheden.nl/judo/"},
-    {name:"Judoschool Pot",city:["Regio"],disc:["judo","bjjmma"],age:"jeugd",loc:"o.a. Dieren (Rheden)",desc:"Judo en BJJ voor kinderen, jeugd en volwassenen in de regio Zutphen–Dieren–Brummen; persoonlijke begeleiding.",url:"https://judoschoolpot.nl/"},
+    {name:"Judovereniging Heumen",city:["Regio"],disc:["judo"],age:"jeugd",loc:"Malden / Overasselt",desc:"Judovereniging sinds 1972 met leden uit Malden, Heumen, Overasselt, Mook en omgeving.",t:"vr 19:00–20:00 (groep 3) of 20:00–21:30 (groep 4), De Terp",url:"https://judoverenigingheumen.nl/"},
+    {name:"Judo en Jiu-Jitsu Groesbeek",city:["Regio"],disc:["judo","jiujitsu"],age:"jeugd",loc:"Sportpark Zuid, Groesbeek",desc:"Judovereniging in Groesbeek; organiseert al bijna 40 jaar het judotoernooi Groesbeek.",t:"vr 19:00–20:00 (vanaf 8 jr) · di 18:00–19:00 (alle leeftijden)",url:"http://judogroesbeek.nl/"},
+    {name:"WIK Rheden",city:["Regio"],disc:["judo"],age:"vanaf 3 jr",loc:"WIK-huis, IJsselsingel 95, Rheden",desc:"Judo voor kinderen op woensdag: aparte groepen vanaf 3 jaar en vanaf 7 jaar. Proefles mogelijk.",t:"vr 15:30–16:30 (groep 9–12 jr); 14 jr valt buiten de jeugdgroepen",url:"https://www.wikrheden.nl/judo/"},
+    {name:"Judoschool Pot",city:["Regio"],disc:["judo","bjjmma"],age:"jeugd",loc:"o.a. Dieren (Rheden)",desc:"Judo en BJJ voor kinderen, jeugd en volwassenen in de regio Zutphen–Dieren–Brummen; persoonlijke begeleiding.",t:"wo 17:00–18:30 (Dieren, groep 12+)",url:"https://judoschoolpot.nl/"},
     {name:"Fitnesscentrum Zevenaar",city:["Regio"],disc:["judo"],age:"jong en oud",loc:"Zevenaar (Liemers)",desc:"Recreatief judo voor jong en oud o.l.v. Coen van Boxtel.",url:"https://www.fitnesscentrumzevenaar.nl/judo/"},
-    {name:"De la Croes Sports",city:["Regio"],disc:["judo"],age:"diverse leeftijdsgroepen",loc:"Zevenaar, Westervoort, Didam",desc:"Judolessen op basisscholen in de Liemers, in meerdere leeftijdsgroepen.",url:"https://marvindelacroes.nl/lesrooster/"},
+    {name:"De la Croes Sports",city:["Regio"],disc:["judo"],age:"diverse leeftijdsgroepen",loc:"Zevenaar, Westervoort, Didam",desc:"Judolessen op basisscholen in de Liemers, in meerdere leeftijdsgroepen.",t:"di 17:15–18:15 (Zevenaar, 10–14 jr) · do 18:30–19:45 (Didam, 10–14 jr)",url:"https://marvindelacroes.nl/lesrooster/"},
     {name:"Energia Martial Arts – Zevenaar",city:["Regio"],disc:["bjjmma","judo"],age:"jeugd",loc:"Zevenaar",desc:"BJJ, judo kids en MMA-jeugd; onderdeel van het Energia-netwerk (meetrainen op alle locaties).",url:"https://energia-martialarts.com/jiu-jitsu-zevenaar/"},
     {name:"Kickboksen voor Kinderen – Renkum",city:["Regio"],disc:["kickboksen"],age:"vanaf 6 jr",loc:"Renkum",desc:"Kinderkickboksen vanaf 6 jaar in een gemoedelijke sfeer; gratis proefles.",url:"https://kickboksenvoorkinderen.nl/locaties-lestijden/kickboksen-voor-kinderen-in-renkum/"},
     {name:"Sam Lung Martial Arts",city:["Regio"],disc:["karate","jiujitsu"],age:"vanaf 4 jr",loc:"Wijchen",desc:"Karate, eskrima en effectieve zelfverdediging vanaf 4 jaar; ook een vestiging in Oss.",url:"https://samlung.nl/"},
-    {name:"Shin Sei Ryu",city:["Regio"],disc:["karate","jiujitsu"],age:"jeugd",loc:"regio Ewijk / Beuningen",desc:"Oosterse sportbeleving en persoonlijke ontwikkeling met jeugdgroepen.",url:"https://www.shinseiryu.nl/"}
+    {name:"Shin Sei Ryu",city:["Regio"],disc:["karate","jiujitsu"],age:"jeugd",loc:"regio Ewijk / Beuningen",desc:"Oosterse sportbeleving en persoonlijke ontwikkeling met jeugdgroepen.",t:"vr 17:00–18:00 (Teens Martial Arts)",url:"https://www.shinseiryu.nl/"}
   ];
 
   function countCity(c){return CLUBS.filter(function(x){return x.city.indexOf(c)>-1;}).length;}
@@ -366,12 +382,21 @@
   var discSet={};CLUBS.forEach(function(c){c.disc.forEach(function(d){discSet[d]=1;});});
   document.getElementById("stat-disc").textContent=Object.keys(discSet).length;
 
-  var state={q:"",city:"all",disc:{}};
+  var state={q:"",city:"all",disc:{},day:"all"};
   var elResults=document.getElementById("results");
   var elCount=document.getElementById("resultcount");
   var elClear=document.getElementById("clearbtn");
   var elSearch=document.getElementById("search");
   var elChips=document.getElementById("chips");
+  var elDaySeg=document.getElementById("daySeg");
+
+  var DAYRE=/\b(ma|di|wo|do|vr|za|zo)\b/g;
+  function trainDays(c){
+    if(!c.t)return [];
+    var out=[],m;DAYRE.lastIndex=0;
+    while((m=DAYRE.exec(c.t)))if(out.indexOf(m[1])===-1)out.push(m[1]);
+    return out;
+  }
 
   DISCIPLINES.forEach(function(d){
     var b=document.createElement("button");
@@ -386,10 +411,20 @@
     elChips.appendChild(b);
   });
 
-  Array.prototype.forEach.call(document.querySelectorAll(".seg button"),function(b){
+  Array.prototype.forEach.call(document.querySelectorAll("#citySeg button"),function(b){
     b.addEventListener("click",function(){
       state.city=b.getAttribute("data-city");
-      Array.prototype.forEach.call(document.querySelectorAll(".seg button"),function(x){
+      Array.prototype.forEach.call(document.querySelectorAll("#citySeg button"),function(x){
+        x.setAttribute("aria-pressed",x===b?"true":"false");
+      });
+      render();
+    });
+  });
+
+  Array.prototype.forEach.call(elDaySeg.querySelectorAll("button"),function(b){
+    b.addEventListener("click",function(){
+      state.day=b.getAttribute("data-day");
+      Array.prototype.forEach.call(elDaySeg.querySelectorAll("button"),function(x){
         x.setAttribute("aria-pressed",x===b?"true":"false");
       });
       render();
@@ -399,9 +434,10 @@
   elSearch.addEventListener("input",function(){state.q=elSearch.value.toLowerCase().trim();render();});
 
   elClear.addEventListener("click",function(){
-    state={q:"",city:"all",disc:{}};
+    state={q:"",city:"all",disc:{},day:"all"};
     elSearch.value="";
-    Array.prototype.forEach.call(document.querySelectorAll(".seg button"),function(x){x.setAttribute("aria-pressed",x.getAttribute("data-city")==="all"?"true":"false");});
+    Array.prototype.forEach.call(document.querySelectorAll(".seg button[data-city]"),function(x){x.setAttribute("aria-pressed",x.getAttribute("data-city")==="all"?"true":"false");});
+    Array.prototype.forEach.call(elDaySeg.querySelectorAll("button"),function(x){x.setAttribute("aria-pressed",x.getAttribute("data-day")==="all"?"true":"false");});
     Array.prototype.forEach.call(elChips.querySelectorAll(".chip"),function(x){x.setAttribute("aria-pressed","false");});
     render();
   });
@@ -411,6 +447,7 @@
 
   function matches(c){
     if(state.city!=="all"&&c.city.indexOf(state.city)===-1)return false;
+    if(state.day!=="all"&&trainDays(c).indexOf(state.day)===-1)return false;
     var dk=Object.keys(state.disc);
     if(dk.length){
       var hit=false;for(var i=0;i<dk.length;i++){if(c.disc.indexOf(dk[i])>-1){hit=true;break;}}
@@ -439,6 +476,7 @@
       '<p class="card__desc">'+esc(c.desc)+'</p>'+
       '<div class="meta">'+
         '<span><b>Leeftijd</b>'+esc(c.age)+'</span>'+
+        '<span><b>Traint 14 jr</b>'+esc(c.t||"informeer bij club")+'</span>'+
         '<span><b>Waar</b>'+esc(c.loc)+'</span>'+
       '</div>'+
       '<div class="card__foot"><span>'+esc(host(c.url))+'</span><span class="card__go">website &#8599;</span></div>';
@@ -459,7 +497,7 @@
     });
     elResults.innerHTML="";
 
-    var active=state.q||state.city!=="all"||Object.keys(state.disc).length;
+    var active=state.q||state.city!=="all"||state.day!=="all"||Object.keys(state.disc).length;
     elClear.hidden=!active;
 
     if(!list.length){

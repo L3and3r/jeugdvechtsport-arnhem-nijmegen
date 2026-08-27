@@ -12,7 +12,10 @@ breedste zin) verzorgen in en rond **Arnhem** en **Nijmegen**.
 - Disciplines: judo, karate, taekwondo, boksen, kickboksen / Muay Thai,
   BJJ / grappling / MMA, jiu-jitsu / zelfverdediging, aikido,
   kung fu / wushu / silat / wing chun, krav maga, capoeira, worstelen, kendo / iaido
-- Filteren op stad (Arnhem / Nijmegen / regio), op discipline, en vrij zoeken
+- Filteren op stad (Arnhem / Nijmegen / regio), op discipline, op trainingsdag
+  voor 14-jarigen, en vrij zoeken
+- Per kaart de regel **"Traint 14 jr"**: dag + tijd van de les waar een
+  14-jarige in valt (waar bekend van de clubwebsite; anders "informeer bij club")
 - Elke kaart linkt door naar de website van de club
 - Licht/donker thema
 
@@ -28,5 +31,7 @@ Correcties en aanvullingen zijn welkom via een issue of pull request.
 ## Technisch
 
 Eén bestand: `index.html`. Geen build, geen dependencies. De data staat als
-JavaScript-array bovenaan het `<script>`-blok; een aanbieder toevoegen of
-aanpassen doe je daar.
+JavaScript-array (`CLUBS`) bovenaan het `<script>`-blok; een aanbieder toevoegen
+of aanpassen doe je daar. Het optionele veld `t:` bevat de trainingsdag(en) en
+-tijd(en) voor 14-jarigen; het dagfilter leest de weekdag-afkortingen
+(`ma di wo do vr za zo`) rechtstreeks uit die tekst.
