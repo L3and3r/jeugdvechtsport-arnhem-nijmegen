@@ -108,7 +108,7 @@
   .clearbtn{background:none;border:0;color:var(--vermilion);font:inherit;cursor:pointer;text-decoration:underline}
   .disc-note{font-family:var(--font-mono);font-size:var(--step--2);color:var(--muted);margin-top:.6rem}
 
-  .snelkeuze{margin:0 0 2.4rem;padding:1.4rem 1.5rem 1.6rem;background:var(--surface-2);border:1px solid var(--line);border-radius:6px}
+  .snelkeuze{margin:1.6rem 0 .4rem;padding:1.4rem 1.5rem 1.6rem;background:var(--surface-2);border:1px solid var(--line);border-radius:6px}
   .snelkeuze h2{font-family:var(--font-display);font-weight:700;font-size:var(--step-2);letter-spacing:-.01em}
   .snelkeuze__lede{max-width:72ch;font-size:var(--step--1);color:var(--ink);margin:.5rem 0 1.3rem;line-height:1.6}
   .snelkeuze__cols{display:grid;gap:1.6rem}
@@ -122,6 +122,10 @@
   .sk-meta{display:block;color:var(--muted);font-size:var(--step--2);margin-top:.1rem}
   .sk-meta.sk-disc{font-family:var(--font-mono);text-transform:uppercase;letter-spacing:.04em}
   .sk-day{color:var(--indigo);font-weight:700}
+
+  .list-head{margin:.3rem 0 1.5rem;padding-bottom:.5rem;border-bottom:2px solid var(--ink)}
+  .list-head h2{font-family:var(--font-display);font-weight:700;font-size:var(--step-2);letter-spacing:-.01em}
+  .list-head p{font-family:var(--font-mono);font-size:var(--step--2);color:var(--muted);margin-top:.35rem}
 
   .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(clamp(250px,29vw,320px),1fr));gap:1rem}
   .grid__head{grid-column:1/-1;display:flex;align-items:baseline;gap:.8rem;margin:1.9rem 0 .1rem;padding-bottom:.4rem;border-bottom:2px solid var(--ink)}
@@ -184,6 +188,23 @@
   </header>
 </div>
 
+<div class="wrap">
+  <section class="snelkeuze" id="snelkeuze" aria-labelledby="snelkeuze-h">
+    <h2 id="snelkeuze-h">Snelkeuze voor 14-jarigen</h2>
+    <p class="snelkeuze__lede">Clubs waar een 14-jarige terecht kan op de dagen die het beste uitkomen: <b>Arnhem op maandag, dinsdag of woensdag</b> en <b>Nijmegen op vrijdag</b>. Samengesteld uit de &ldquo;Traint 14 jr&rdquo;-regel per club &mdash; roosters wijzigen vaak, dus controleer de tijden altijd bij de club zelf. Dit lijstje staat los van de filters hieronder.</p>
+    <div class="snelkeuze__cols">
+      <div class="snelkeuze__col" id="sk-arnhem">
+        <h3>Arnhem &middot; ma / di / wo</h3>
+        <ul></ul>
+      </div>
+      <div class="snelkeuze__col" id="sk-nijmegen">
+        <h3>Nijmegen &middot; vrijdag</h3>
+        <ul></ul>
+      </div>
+    </div>
+  </section>
+</div>
+
 <div class="filters">
   <div class="wrap">
     <div class="controls">
@@ -218,20 +239,10 @@
 </div>
 
 <main class="wrap">
-  <section class="snelkeuze" id="snelkeuze" aria-labelledby="snelkeuze-h">
-    <h2 id="snelkeuze-h">Snelkeuze voor 14-jarigen</h2>
-    <p class="snelkeuze__lede">Clubs waar een 14-jarige terecht kan op de dagen die het beste uitkomen: <b>Arnhem op maandag, dinsdag of woensdag</b> en <b>Nijmegen op vrijdag</b>. Samengesteld uit de &ldquo;Traint 14 jr&rdquo;-regel per club &mdash; roosters wijzigen vaak, dus controleer de tijden altijd bij de club zelf.</p>
-    <div class="snelkeuze__cols">
-      <div class="snelkeuze__col" id="sk-arnhem">
-        <h3>Arnhem &middot; ma / di / wo</h3>
-        <ul></ul>
-      </div>
-      <div class="snelkeuze__col" id="sk-nijmegen">
-        <h3>Nijmegen &middot; vrijdag</h3>
-        <ul></ul>
-      </div>
-    </div>
-  </section>
+  <div class="list-head">
+    <h2>Alle clubs &amp; verenigingen</h2>
+    <p>Doorzoekbaar en filterbaar met de balk hierboven &mdash; gegroepeerd op hoofddiscipline.</p>
+  </div>
 
   <div class="grid" id="results"></div>
 
