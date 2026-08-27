@@ -15,7 +15,9 @@ breedste zin) verzorgen in en rond **Arnhem** en **Nijmegen**.
 - Filteren op stad (Arnhem / Nijmegen / regio), op discipline, op trainingsdag
   voor 14-jarigen, en vrij zoeken
 - Per kaart de regel **"Traint 14 jr"**: dag + tijd van de les waar een
-  14-jarige in valt (waar bekend van de clubwebsite; anders "informeer bij club")
+  14-jarige in valt (bekend voor ~79 van de 87 clubs; anders "informeer bij club")
+- Bovenaan een **"Snelkeuze voor 14-jarigen"**: clubs in Arnhem die op
+  ma/di/wo trainen en clubs in Nijmegen die op vrijdag trainen
 - Elke kaart linkt door naar de website van de club
 - Licht/donker thema
 
